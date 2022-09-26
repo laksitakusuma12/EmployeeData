@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OFFICE_WebApp.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,11 @@ namespace OFFICE_WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddDbContext<MyContext>(option =>
+                option.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
+            // MyConnection adalah connection string
+            // Configuration di dapat dari appsettings.json
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

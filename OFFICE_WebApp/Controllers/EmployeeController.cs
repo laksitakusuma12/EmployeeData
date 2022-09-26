@@ -145,7 +145,7 @@ namespace OFFICE_WebApp.Controllers
                         $"WHERE id = {employee.Id} ";
                     sqlCommand.ExecuteNonQuery();
                     sqlTransaction.Commit();
-                    Console.WriteLine($"Data Karyawan sudah diedit");
+                    Console.WriteLine($"Data Karyawan Sudah Diedit");
                 }
                 catch (Exception ex)
                 {
