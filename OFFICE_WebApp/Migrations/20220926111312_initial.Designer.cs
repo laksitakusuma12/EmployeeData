@@ -9,7 +9,7 @@ using OFFICE_WebApp.Context;
 namespace OFFICE_WebApp.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220926084350_initial")]
+    [Migration("20220926111312_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
