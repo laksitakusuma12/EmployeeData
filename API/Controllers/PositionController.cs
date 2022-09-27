@@ -12,11 +12,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CampusEmployeeController : ControllerBase
+    public class PositionController : ControllerBase
     {
         MyContext myContext;
-        
-        public CampusEmployeeController(MyContext myContext)
+
+        public PositionController(MyContext myContext)
         {
             this.myContext = myContext;
         }
@@ -25,35 +25,35 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var data = myContext.employeecampuses.Include(x => x.Position).Include(y => y.Position.Major).ToList();
-            if(data.Count == 0)
+            var data = myContext.positions.Include(x => x.Major).ToList();
+            if (data.Count == 0)
+            {
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
-            return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            
-            //return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            //return BadRequest(new {message = "sukses mengambil data", StatusCode = 200, data = data });
-            //return NotFound(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            //return Unauthorized();
-            //return Forbid();
+            } else
+            {
+                return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
+            }
         }
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var data = myContext.employeecampuses.Include(x => x.Position).Include(y => y.Position.Major).Where(x => x.Id == id);
+            var data = myContext.positions.Include(x => x.Major).Where(x => x.Id == id);
             if (data == null)
+            {
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
-            return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
+            } else
+            {
+                return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
+            }
         }
         // UPDATE 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, EmployeeCampus employeeCampus)
+        public IActionResult Put(int id, Position position)
         {
-            var data = myContext.employeecampuses.Find(id);
-            data.Name = employeeCampus.Name;
-            data.Phone = employeeCampus.Phone;
-            data.Address = employeeCampus.Address;
-            data.PositionId = employeeCampus.PositionId;
-            myContext.employeecampuses.Update(data);
+            var data = myContext.positions.Find(id);
+            data.PositionEmployee = position.PositionEmployee;
+            data.MajorId = position.MajorId;
+            myContext.positions.Update(data);
             var result = myContext.SaveChanges();
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil mengupdate data" });
@@ -61,9 +61,9 @@ namespace API.Controllers
         }
         // CREATE
         [HttpPost]
-        public IActionResult Post(EmployeeCampus employeeCampus)
+        public IActionResult Post(Position position)
         {
-            myContext.employeecampuses.Add(employeeCampus);
+            myContext.positions.Add(position);
             var result = myContext.SaveChanges();
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menambah data" });
@@ -73,8 +73,8 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var data = myContext.employeecampuses.Find(id);
-            myContext.employeecampuses.Remove(data);
+            var data = myContext.positions.Find(id);
+            myContext.positions.Remove(data);
             var result = myContext.SaveChanges();
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menghapus data" });
@@ -82,3 +82,4 @@ namespace API.Controllers
         }
     }
 }
+

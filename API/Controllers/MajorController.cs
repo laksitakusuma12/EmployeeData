@@ -1,8 +1,8 @@
 ﻿using API.Context;
 using API.Models;
+using API.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +12,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CampusEmployeeController : ControllerBase
+    public class MajorController : ControllerBase
     {
         MyContext myContext;
-        
-        public CampusEmployeeController(MyContext myContext)
+
+        public MajorController(MyContext myContext)
         {
             this.myContext = myContext;
         }
@@ -25,35 +25,26 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var data = myContext.employeecampuses.Include(x => x.Position).Include(y => y.Position.Major).ToList();
-            if(data.Count == 0)
+            var data = myContext.majors.ToList();
+            if (data.Count == 0)
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
             return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            
-            //return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            //return BadRequest(new {message = "sukses mengambil data", StatusCode = 200, data = data });
-            //return NotFound(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            //return Unauthorized();
-            //return Forbid();
         }
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var data = myContext.employeecampuses.Include(x => x.Position).Include(y => y.Position.Major).Where(x => x.Id == id);
+            var data = myContext.majors.Find(id);
             if (data == null)
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
             return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
         }
         // UPDATE 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, EmployeeCampus employeeCampus)
+        public IActionResult Put(int id, Major major)
         {
-            var data = myContext.employeecampuses.Find(id);
-            data.Name = employeeCampus.Name;
-            data.Phone = employeeCampus.Phone;
-            data.Address = employeeCampus.Address;
-            data.PositionId = employeeCampus.PositionId;
-            myContext.employeecampuses.Update(data);
+            var data = myContext.majors.Find(id);
+            data.MajorEmployee = major.MajorEmployee;
+            myContext.majors.Update(data);
             var result = myContext.SaveChanges();
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil mengupdate data" });
@@ -61,9 +52,13 @@ namespace API.Controllers
         }
         // CREATE
         [HttpPost]
-        public IActionResult Post(EmployeeCampus employeeCampus)
+        public IActionResult Post(MajorViewModel major)
         {
-            myContext.employeecampuses.Add(employeeCampus);
+            myContext.majors.Add(new Major
+            {
+                Id = major.Id,
+                MajorEmployee = major.MajorEmployee
+            });
             var result = myContext.SaveChanges();
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menambah data" });
@@ -73,8 +68,8 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var data = myContext.employeecampuses.Find(id);
-            myContext.employeecampuses.Remove(data);
+            var data = myContext.majors.Find(id);
+            myContext.majors.Remove(data);
             var result = myContext.SaveChanges();
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menghapus data" });
@@ -82,3 +77,4 @@ namespace API.Controllers
         }
     }
 }
+
