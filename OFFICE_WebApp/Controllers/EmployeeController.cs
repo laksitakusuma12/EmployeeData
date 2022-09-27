@@ -47,7 +47,7 @@ namespace OFFICE_WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                myContext.employeecampuses.Add(employeeCampus);
+                myContext.employeecampuses.Include(x => x.Position).Include(y => y.Position.Major).ToList().Add(employeeCampus);
                 var result = myContext.SaveChanges();
                 if (result > 0)
                     return RedirectToAction("Index");
