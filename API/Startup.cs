@@ -1,4 +1,5 @@
 using API.Context;
+using API.Repositories.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -51,6 +52,14 @@ namespace API
                     }
                 });
             });
+
+            #region Dependency Injection
+
+            services.AddScoped<EmployeeCampusRepository>();
+            services.AddScoped<PositionRepository>();
+            services.AddScoped<AccountRepository>();
+
+            #endregion Depedency Injection
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,5 +16,9 @@ namespace API.Context
         public DbSet<EmployeeCampus> employeecampuses { get; set; }
         public DbSet<Position> positions { get; set; }
         public DbSet<Major> majors { get; set; }
+        public DbSet<Role> roles { get; set; }
+        public DbSet<UserRole> userRoles { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<Employee> employees { get; set; }
     }
 }

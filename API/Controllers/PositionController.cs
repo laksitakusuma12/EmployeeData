@@ -1,5 +1,6 @@
 ﻿using API.Context;
 using API.Models;
+using API.Repositories.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,47 +15,35 @@ namespace API.Controllers
     [ApiController]
     public class PositionController : ControllerBase
     {
-        MyContext myContext;
+        PositionRepository positionRepository;
 
-        public PositionController(MyContext myContext)
+        public PositionController(PositionRepository positionRepository)
         {
-            this.myContext = myContext;
+            this.positionRepository = positionRepository;
         }
 
         // READ
         [HttpGet]
         public IActionResult Get()
         {
-            var data = myContext.positions.Include(x => x.Major).ToList();
+            var data = positionRepository.Get();
             if (data.Count == 0)
-            {
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
-            } else
-            {
-                return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            }
+            return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
         }
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var data = myContext.positions.Include(x => x.Major).Where(x => x.Id == id);
+            var data = positionRepository.Get();
             if (data == null)
-            {
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
-            } else
-            {
-                return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
-            }
+            return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
         }
         // UPDATE 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Position position)
+        public IActionResult Put(Position position)
         {
-            var data = myContext.positions.Find(id);
-            data.PositionEmployee = position.PositionEmployee;
-            data.MajorId = position.MajorId;
-            myContext.positions.Update(data);
-            var result = myContext.SaveChanges();
+            var result = positionRepository.Put(position);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil mengupdate data" });
             return BadRequest(new { StatusCode = 400, message = "gagal mengupdate data" });
@@ -63,8 +52,7 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult Post(Position position)
         {
-            myContext.positions.Add(position);
-            var result = myContext.SaveChanges();
+            var result = positionRepository.Post(position);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menambah data" });
             return BadRequest(new { StatusCode = 400, message = "gagal menambah data" });
@@ -73,9 +61,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var data = myContext.positions.Find(id);
-            myContext.positions.Remove(data);
-            var result = myContext.SaveChanges();
+            var result = positionRepository.Delete(id);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menghapus data" });
             return BadRequest(new { StatusCode = 400, message = "gagal menghapus data" });
