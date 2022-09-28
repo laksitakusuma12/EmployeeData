@@ -1,6 +1,5 @@
 ﻿using API.Models.ViewModels;
 using API.Repositories.Data;
-using API.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,36 +14,24 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
-        HttpClient HttpClient;
-        string address;
+        AccountRepository accountRepository;
 
-        public AccountController()
+        public AccountController(AccountRepository accountRepository)
         {
-            this.address = "https://localhost:44334/api/Account/";
-            HttpClient = new HttpClient
-            {
-                BaseAddress = new Uri(address)
-            };
+            this.accountRepository = accountRepository;
         }
-        public IActionResult Login()
-        {
-            return View();
-        }
+
         [HttpPost]
-        public async Task<IActionResult> Login(Login login)
+        public IActionResult Login(Login login)
         {
-            StringContent content = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
-            var result = HttpClient.PostAsync(address, content).Result;
-            if (result.IsSuccessStatusCode)
+            var data = accountRepository.Login(login);
+            if (data == null)
             {
-                var data = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
-                HttpContext.Session.SetString("Role", data.Data.Role);
-                return RedirectToAction("Index", "Home");
+                return BadRequest(new { message = "Gagal login! Email atau password salah", StatusCode = 400 });
             }
-            return View();
-
+            return Ok(new { message = "Berhasil login!", StatusCode = 200, data = data });
         }
     }
 }

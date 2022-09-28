@@ -52,7 +52,7 @@ namespace API.Controllers
         }
         // CREATE
         [HttpPost]
-        public IActionResult Post(MajorViewModel major)
+        public IActionResult Post(Major major)
         {
             myContext.majors.Add(new Major
             {
