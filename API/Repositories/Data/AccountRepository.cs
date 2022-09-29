@@ -7,6 +7,15 @@ namespace API.Repositories.Data
 {
     public class AccountRepository
     {
+        /*
+         * Login
+         * Register
+         * Change Password
+         * Forgot Password
+         */
+
+        // requirement login -> email & password
+        // response login -> Id Karyawan, Email, Role (JWT -> JSON Web Token)
         MyContext myContext;
 
         public AccountRepository(MyContext myContext)
@@ -31,6 +40,24 @@ namespace API.Repositories.Data
                 return null;
 
             return new ResponseLogin
+            {
+                Id = data.Id,
+                Email = data.User.Employee.Email,
+                FullName = data.User.Employee.FullName,
+                Role = data.Role.Name
+
+            };
+        }
+
+        public ResponseRegister Register(Register register)
+        {
+            var data = myContext.userRoles.
+                Include(data => data.User.Employee).
+                Include(data => data.User).
+                Include(data => data.Role).
+                FirstOrDefault();
+
+            return new ResponseRegister
             {
                 Id = data.Id,
                 Email = data.User.Employee.Email,
