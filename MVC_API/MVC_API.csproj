@@ -9,4 +9,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\adminLTE\.github\codeql\codeql-config.yml" />
+    <None Include="wwwroot\adminLTE\.github\CONTRIBUTING.md" />
+    <None Include="wwwroot\adminLTE\.github\dependabot.yml" />
+    <None Include="wwwroot\adminLTE\.github\ISSUE_TEMPLATE\bug-report-for-adminlte-v3.1-x.md" />
+    <None Include="wwwroot\adminLTE\.github\ISSUE_TEMPLATE\feature-request-for-adminlte-v4-x.md" />
+    <None Include="wwwroot\adminLTE\.github\workflows\ci.yml" />
+    <None Include="wwwroot\adminLTE\.github\workflows\codeql.yml" />
+    <None Include="wwwroot\adminLTE\.github\workflows\docs.yml" />
+    <None Include="wwwroot\adminLTE\.github\workflows\lint.yml" />
+  </ItemGroup>
+
 </Project>

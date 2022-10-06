@@ -63,7 +63,6 @@ namespace API.Repositories.Data
                 Email = data.User.Employee.Email,
                 FullName = data.User.Employee.FullName,
                 Role = data.Role.Name
-
             };
         }
     }

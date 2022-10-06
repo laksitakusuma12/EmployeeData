@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models.ViewModels;
 
 namespace API.Repositories.Data
 {
@@ -19,38 +20,59 @@ namespace API.Repositories.Data
         }
         public int Delete(int id)
         {
-            var data = Get(id);
+            var data = myContext.employeecampuses.Find(id);
             myContext.employeecampuses.Remove(data);
             var result = myContext.SaveChanges();
             return result;
         }
 
-        public List<EmployeeCampus>Get()
+        public List<EmployeeCampusViewModel> Get()
         {
-            var data = myContext.employeecampuses.Include(x => x.Position).Include(y => y.Position.Major).ToList();
+            var data = myContext.employeecampuses.Select(x => new EmployeeCampusViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Phone = x.Phone,
+                Address = x.Address,
+                PositionId = x.PositionId
+            }).ToList();
+
             return data;
         }
 
-        public EmployeeCampus Get(int id)
+        public EmployeeCampusViewModel Get(int id)
         {
-            var data = myContext.employeecampuses.Find(id);
+            var data = myContext.employeecampuses.Where(x => x.Id == id).Select(x => new EmployeeCampusViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Phone = x.Phone,
+                Address = x.Address,
+                PositionId = x.PositionId
+            }).FirstOrDefault();
             return data;
         }
 
-        public int Post(EmployeeCampus employeeCampus)
+        public int Post(EmployeeCampusViewModel campus)
         {
-            myContext.employeecampuses.Add(employeeCampus);
+            myContext.employeecampuses.Add(new EmployeeCampus
+            {
+                Name = campus.Name,
+                Phone = campus.Phone,
+                Address = campus.Address,
+                PositionId = campus.PositionId
+            });
             var result = myContext.SaveChanges();
             return result;
         }
 
-        public int Put(EmployeeCampus employeeCampus)
+        public int Put(int id, EmployeeCampusViewModel campus)
         {
-            var data = Get(employeeCampus.Id);
-            data.Name = employeeCampus.Name;
-            data.Phone = employeeCampus.Phone;
-            data.Address = employeeCampus.Address;
-            data.PositionId = employeeCampus.PositionId;
+            var data = myContext.employeecampuses.Find(id);
+            data.Name = campus.Name;
+            data.Phone = campus.Phone;
+            data.Address = campus.Address;
+            data.PositionId = campus.PositionId;
             myContext.employeecampuses.Update(data);
             var result = myContext.SaveChanges();
             return result;

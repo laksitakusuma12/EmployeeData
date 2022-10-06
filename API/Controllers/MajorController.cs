@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models.ViewModels;
+using API.Repositories.Data;
 
 namespace API.Controllers
 {
@@ -14,18 +16,18 @@ namespace API.Controllers
     [ApiController]
     public class MajorController : ControllerBase
     {
-        MyContext myContext;
+        MajorRepository _repository;
 
-        public MajorController(MyContext myContext)
+        public MajorController(MajorRepository repository)
         {
-            this.myContext = myContext;
+            this._repository = repository;
         }
 
         // READ
         [HttpGet]
         public IActionResult Get()
         {
-            var data = myContext.majors.ToList();
+            var data = _repository.Get();
             if (data.Count == 0)
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
             return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
@@ -33,33 +35,25 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var data = myContext.majors.Find(id);
+            var data = _repository.Get(id);
             if (data == null)
                 return Ok(new { message = "gagal mengambil data", StatusCode = 200, data = "null" });
             return Ok(new { message = "sukses mengambil data", StatusCode = 200, data = data });
         }
         // UPDATE 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Major major)
+        public IActionResult Put(int id, MajorViewModel major)
         {
-            var data = myContext.majors.Find(id);
-            data.MajorEmployee = major.MajorEmployee;
-            myContext.majors.Update(data);
-            var result = myContext.SaveChanges();
+            var result = _repository.Put(id, major);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil mengupdate data" });
             return BadRequest(new { StatusCode = 400, message = "gagal mengupdate data" });
         }
         // CREATE
         [HttpPost]
-        public IActionResult Post(Major major)
+        public IActionResult Post(MajorViewModel major)
         {
-            myContext.majors.Add(new Major
-            {
-                Id = major.Id,
-                MajorEmployee = major.MajorEmployee
-            });
-            var result = myContext.SaveChanges();
+            var result = _repository.Post(major);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menambah data" });
             return BadRequest(new { StatusCode = 400, message = "gagal menambah data" });
@@ -68,9 +62,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var data = myContext.majors.Find(id);
-            myContext.majors.Remove(data);
-            var result = myContext.SaveChanges();
+            var result = _repository.Delete(id);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "berhasil menghapus data" });
             return BadRequest(new { StatusCode = 400, message = "gagal menghapus data" });

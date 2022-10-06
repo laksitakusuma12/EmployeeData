@@ -113,3 +113,4 @@ D:\course\Metrodata\Pertemuan_10\OFFICE_WebApp\MVC_API\obj\Debug\netcoreapp3.1\M
 D:\course\Metrodata\Pertemuan_10\OFFICE_WebApp\MVC_API\obj\Debug\netcoreapp3.1\MVC_API.pdb
 D:\course\Metrodata\Pertemuan_10\OFFICE_WebApp\MVC_API\obj\Debug\netcoreapp3.1\MVC_API.genruntimeconfig.cache
 D:\course\Metrodata\Pertemuan_10\OFFICE_WebApp\MVC_API\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
+D:\course\Metrodata\Pertemuan_10\OFFICE_WebApp\MVC_API\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_AdminLayout.cshtml.g.cs

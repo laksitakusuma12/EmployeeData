@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models.ViewModels;
 
 namespace API.Repositories.Interface
 {
     interface IPositionRepository
     {
-        List<Position> Get();
-        Position Get(int id);
-        int Post(Position position);
-        int Put(Position position);
+        List<PositionViewModel> Get();
+        PositionViewModel Get(int id);
+        int Post(PositionViewModel position);
+        int Put(int id, PositionViewModel position);
         int Delete(int id);
     }
 }

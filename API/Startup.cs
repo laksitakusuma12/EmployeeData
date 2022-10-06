@@ -51,6 +51,10 @@ namespace API
                         Url = new Uri("https://example.com/license")
                     }
                 });
+
+                services.AddCors(option => option.AddPolicy("DefaultPolicy", builder => {
+                    builder.AllowAnyOrigin().WithMethods("GET", "POST", "PUT", "DELETE");
+                }));
             });
 
             #region Dependency Injection
@@ -78,6 +82,8 @@ namespace API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("DefaultPolicy");
 
             app.UseRouting();
 
